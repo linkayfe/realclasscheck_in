@@ -9,7 +9,7 @@ import java.util.List;
 public interface Check_inService extends IService<Checkin> {
 
     List<Display> selectSome(Display displayList);
-//    List<Display> displayList(Long[] ids);
+    Display selectOne(Long checkinNo);
     List<Display> displayList(String grade,String college,String clazz);
     List<Display> displayList();
 }

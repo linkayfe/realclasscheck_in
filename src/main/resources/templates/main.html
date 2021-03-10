@@ -50,6 +50,7 @@
     </script>
 </head>
 <body class="container">
+<span>您好，<a th:href="@{/check/logout}" th:text="${session.login.studentId}"></a></span>
 <h2>班级考勤列表</h2>
 <div class="hidden" th:object="${oldDisplay}">
     <input type="hidden" id="grade" th:value="*{grade}">

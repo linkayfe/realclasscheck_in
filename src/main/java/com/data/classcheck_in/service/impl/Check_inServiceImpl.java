@@ -24,6 +24,11 @@ public class Check_inServiceImpl
         return mapper.selectSome(displayList);
     }
 
+    @Override
+    public Display selectOne(Long checkinNo) {
+        return mapper.selectOne(checkinNo);
+    }
+
     //通过一个id数组查询展示信息
 //    public List<Display> displayList(Long[] ids){
 //        return mapper.displayList(ids);

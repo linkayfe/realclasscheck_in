@@ -1,11 +1,124 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>新增考勤信息</title>
-    <link rel="stylesheet" href="bootstrap.css">
-</head>
-<body>
+    <link rel="stylesheet" href="bootstrap.css" th:href="@{/bootstrap.css}">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script>
+        $(function(){
+            var list = null;
+            $.get('/check/student',{'studentId':$("#login").val()},function(result){
+                list = result;
+                for (var i=0;i<list.length;i++){
+                    var student = list[i];
+                    $("#selectStudentId").append('<option name="'+student.studentId+'">'+student.studentId+'</option>');
+                }
+            },'json');
 
+            $("#selectStudentId").change(function(){
+                var studentId = $(this).val();
+                for (var i=0;i<list.length;i++){
+                    var student = list[i];
+                    if (studentId==student.studentId){
+                        $("#studentName").attr("value",student.studentName);
+                        $("#grade").attr("value",student.grade);
+                        $("#college").attr("value",student.college);
+                        $("#clazz").attr("value",student.clazz);
+                    }
+                }
+
+            });
+        });
+    </script>
+</head>
+<body class="container">
+<h2><a th:href="@{/check/check}" class="btn btn-info col-sm-1">返回</a>新增考勤信息</h2>
+<input type="hidden" id="login" th:value="${session.login.studentId}">
+<form th:action="@{check/check}" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">学号：</label>
+        <div class="col-sm-5">
+            <select id="selectStudentId" name="studentId" class="form-control" required>
+
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">姓名：</label>
+        <div class="col-sm-5">
+            <input type="text" id="studentName" name="studentName" value="" readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">年级：</label>
+        <div class="col-sm-5">
+           <input type="text" id="grade" readonly >
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">学院：</label>
+        <div class="col-sm-5">
+            <input type="datetime-local" id="college" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">班级：</label>
+        <div class="col-sm-5">
+            <input type="datetime-local" id="clazz" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">日期：</label>
+        <div class="col-sm-5">
+            <input type="date" id="datetime" name="datetime" class="form-control" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">教室：</label>
+        <div class="col-sm-5">
+            <select name="address" class="form-control">
+                <option value="A1-101">A1-101</option>
+                <option value="A1-102">A1-102</option>
+                <option value="A1-103">A1-103</option>
+                <option value="A1-104">A1-104</option>
+                <option value="A1-105">A1-105</option>
+                <option value="A1-206">A1-206</option>
+                <option value="A1-207">A1-207</option>
+                <option value="足球场">足球场</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">节数：</label>
+        <div class="col-sm-5">
+            <select name="subject">
+                <option value="1-2">1-2</option>
+                <option value="3-4">3-4</option>
+                <option value="5-6">5-6</option>
+                <option value="5-7">5-7</option>
+                <option value="7-8">7-8</option>
+                <option value="9-10">9-10</option>
+                <option value="9-11">9-11</option>
+                <option value="11-12">11-12</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">性质：</label>
+        <div class="col-sm-5">
+            <select name="type" class="form-control">
+                <option value="迟到">迟到</option>
+                <option value="请假">请假</option>
+                <option value="旷课">旷课</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="提交" class="btn btn-info col-sm-2">
+            <input type="reset" value="重置" class="btn btn-info col-sm-2 col-sm-offset-2">
+        </div>
+    </div>
+</form>
 </body>
 </html>

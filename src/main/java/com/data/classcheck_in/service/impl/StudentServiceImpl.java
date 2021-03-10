@@ -7,13 +7,16 @@ import com.data.classcheck_in.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
 
     @Autowired
     private StudentMapper mapper;
 
-    public Long[] studentIds(Student student){
+    public List<Student> studentIds(Student student){
         return mapper.studentIds(student);
     }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,12 +60,12 @@ public class Check_inController {
         return "main";
     }
 
-    @GetMapping("/orderBy")
-    @ResponseBody
-    public String orderBy(String column,String type){
-        List<Checkin> check_ins = service.list();
-        return "main";
-    }
+//    @GetMapping("/orderBy")
+//    @ResponseBody
+//    public String orderBy(String column,String type){
+//        List<Checkin> check_ins = service.list();
+//        return "main";
+//    }
 
     @GetMapping("/toInsert")
     public String toInsert(){
@@ -84,8 +85,8 @@ public class Check_inController {
 
     @GetMapping("/toUpdate/{checkinNo}")
     public String toUpdate(@PathVariable("checkinNo") Long checkinNo,Model model){
-        Checkin checkin = service.getById(checkinNo);
-        model.addAttribute("check",checkin);
+        Display display = service.selectOne(checkinNo);
+        model.addAttribute("display",display);
         return "put";
     }
 

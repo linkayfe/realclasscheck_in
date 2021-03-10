@@ -25,6 +25,11 @@ public interface Check_inMapper extends BaseMapper<Checkin> {
             "</script>")
     List<Display> selectSome(Display displayList);
 
+
+    @Select("select c.*,s.student_name,s.grade,s.college,s.clazz from checkin as c inner join student as s on s.student_id=c.student_id" +
+            " and c.checkin_no=#{checkinNo}")
+    Display selectOne(Long checkinNo);
+
 //    @Select("<script>select c.*,s.student_name,s.grade,s.college,s.clazz from checkin as c inner join student as s on s.student_id in " +
 //            "<foreach collection=\"ids\" item=\"id\" index=\"index\" open=\"(\" separator=\",\" close=\")\">" +
 //            "#{id}" +
