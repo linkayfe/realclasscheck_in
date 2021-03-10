@@ -1,0 +1,25 @@
+# 应用名称
+spring:
+  application:
+    name: humanresourcemanagermentsystem
+  thymeleaf:
+    cache: true
+    check-template: true
+    check-template-location: true
+    servlet:
+      content-type: text/html
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    url: jdbc:mysql://localhost:3306/class_check?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: lkf
+    password: lkf
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+#mybatis-plus配置控制台打印完整带参数SQL语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

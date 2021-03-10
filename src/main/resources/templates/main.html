@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.css}">
+    <style>
+        ul,li{
+            margin: 0;
+            padding:0;
+            list-style: none;
+        }
+    </style>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script>
+        $(function(){
+            $("button[name='del']").click(function(){
+                $("#del_form").prop("action",$(this).attr("del_url")).submit();
+            });
+
+            $.get('/check/student',null,function(result){
+                var list = result;
+                for (var i=0;i<list.length;i++){
+                    var student = list[i];
+                    $('.grade').append('<option id="'+student.grade+'" value="'+student.grade+'">'+student.grade+'</option>');
+                    $('.college').append('<option id="'+student.college+'" value="'+student.college+'">'+student.college+'</option>');
+                    $('.clazz').append('<option id="'+student.clazz+'" value="'+student.clazz+'">'+student.clazz+'</option>');
+                }
+            },'json');
+
+            var gradeVal = $("#grade").val();
+            var collegeVal = $("#college").val();
+            var clazzVal = $("#clazz").val();
+            var addressVal = $("#address").val();
+            var subjectVal = $("#subject").val();
+            var typeVal = $("#type").val();
+            if (gradeVal!=null && gradeVal!='')
+            $("#"+gradeVal).selected = true;
+            if (collegeVal!=null && collegeVal!='')
+            $("#"+collegeVal).selected = true;
+            if (clazzVal!=null && clazzVal!='')
+            $("#"+clazzVal).selected = true;
+            if (addressVal!=null && addressVal!='')
+            $("#"+addressVal).selected = true;
+            if (subjectVal!=null && subjectVal!='')
+            $("#"+subjectVal).selected = true;
+            if (typeVal!=null && typeVal!='')
+            $("#"+typeVal).selected = true;
+        });
+    </script>
+</head>
+<body class="container">
+<h2>班级考勤列表</h2>
+<div class="hidden" th:object="${oldDisplay}">
+    <input type="hidden" id="grade" th:value="*{grade}">
+    <input type="hidden" id="college" th:value="*{college}">
+    <input type="hidden" id="clazz" th:value="*{clazz}">
+    <input type="hidden" id="address" th:value="*{address}">
+    <input type="hidden" id="subject" th:value="*{subject}">
+    <input type="hidden" id="type" th:value="*{type}">
+</div>
+<form action="/check/check/selectSome" method="get" th:object="${oldDisplay}">
+    <input type="hidden" name="loginUser" th:value="${session.login}">
+    <ul class="list-group list-inline">
+        <li>
+            <span>学号:</span><input type="number" name="studentId" th:value="*{studentId}">
+        </li>
+        <li>
+            <span>日期:</span><input type="date" name="datetime" value="" th:value="*{datetime}">
+        </li>
+
+<!--        以下三个选项仅提供给大管理员选择（辅导员等）-->
+        <li th:if="${session.login.manager eq 2}">
+            <span>年级:</span>
+            <select class="grade" name="grade">
+                <option value=""> </option>
+            </select>
+        </li>
+
+        <li th:if="${session.login.manager eq 2}">
+            <span>学院:</span>
+            <select class="college" name="college">
+                <option value=""> </option>
+            </select>
+        </li>
+
+        <li th:if="${session.login.manager eq 2}">
+            <span>班级:</span>
+            <select class="clazz" name="clazz">
+                <option value=""> </option>
+            </select>
+        </li>
+
+        <li>
+            <span>教室:</span>
+            <select name="address">
+                <option value=""> </option>
+                <option value="A1-101">A1-101</option>
+                <option value="A1-102">A1-102</option>
+                <option value="A1-103">A1-103</option>
+                <option value="A1-104">A1-104</option>
+                <option value="A1-105">A1-105</option>
+                <option value="A1-206">A1-206</option>
+                <option value="A1-207">A1-207</option>
+            </select>
+        </li>
+
+        <li>
+            <span>节数:</span>
+            <select name="subject">
+                <option value=""> </option>
+                <option value="1-2">1-2</option>
+                <option value="3-4">3-4</option>
+                <option value="5-6">5-6</option>
+                <option value="5-7">5-7</option>
+                <option value="7-8">7-8</option>
+                <option value="9-10">9-10</option>
+                <option value="9-11">9-11</option>
+                <option value="11-12">11-12</option>
+            </select>
+        </li>
+
+        <li>
+            <span>性质:</span>
+            <select name="type">
+                <option value=""> </option>
+                <option>请假</option>
+                <option>旷课</option>
+                <option>迟到</option>
+            </select>
+        </li>
+        <li>
+            <button type="submit" class="btn btn-info">查询</button>
+        </li>
+        <li>
+            <a th:href="@{/check/check/export}" class="btn btn-info">下载列表</a>
+        </li>
+        <li th:if="${session.login.manager eq 1}">
+            <a th:href="@{/check/check/toInsert}" class="btn btn-info">新增列表</a>
+        </li>
+    </ul>
+</form>
+<table class="table table-hover">
+    <thead>
+        <th>考勤号</th>
+        <th>学号</th>
+        <th>姓名</th>
+        <th>日期</th>
+        <th>年级</th>
+        <th>学院</th>
+        <th>班级</th>
+        <th>教室</th>
+        <th>节数</th>
+        <th>性质</th>
+    </thead>
+    <tbody>
+        <tr th:each="display:${displayList}">
+            <td th:text="*{display.checkinNo}"></td>
+            <td th:text="*{display.studentId}"></td>
+            <td th:text="*{display.studentName}"></td>
+            <td th:text="*{display.datetime}"></td>
+            <td th:text="*{display.grade}"></td>
+            <td th:text="*{display.college}"></td>
+            <td th:text="*{display.clazz}"></td>
+            <td th:text="*{display.address}"></td>
+            <td th:text="*{display.subject}"></td>
+            <td th:text="*{display.type}"></td>
+            <td class="manager" th:if="${session.login.manager eq 1}">
+                <button th:href='@{/check/check/toUpdate/}+${display.checkinNo}' class='button btn-info'>修改</button><span>
+                &nbsp;|&nbsp;</span>
+                <button th:attr='del_url=@{/check/check/}+${display.checkinNo}' name='del' class='button btn-danger'>删除</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<form method="post" id="del_form">
+    <input type="hidden" name="_method" value="delete">
+</form>
+</body>
+</html>
