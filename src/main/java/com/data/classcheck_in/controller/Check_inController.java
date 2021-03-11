@@ -2,10 +2,12 @@ package com.data.classcheck_in.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.data.classcheck_in.model.Checkin;
+import com.data.classcheck_in.model.Consumer;
 import com.data.classcheck_in.model.Display;
 import com.data.classcheck_in.model.Student;
 import com.data.classcheck_in.service.Check_inService;
 import com.data.classcheck_in.service.StudentService;
+import com.data.classcheck_in.util.Sort;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,14 +37,16 @@ public class Check_inController {
     private StudentService studentService;
 
     @GetMapping
-    public String check_inList(Model model,@RequestAttribute("studentId") Long studentId){
+    public String check_inList(Model model,HttpSession session){
+        Consumer consumer = (Consumer)session.getAttribute("login");
         //通过登录的学号获取所在年级学院班级查询考勤表里的信息
-        Student student = studentService.getById(studentId);
+        Student student = studentService.getById(consumer.getStudentId());
         if (student!=null) {
             //调用方法查询在该年级学院班级的展示信息
             List<Display> displayList = service.displayList(student.getGrade(),student.getCollege(),student.getClazz());
             model.addAttribute("oldDisplay",new Display());
-            model.addAttribute("displayList",displayList);
+            List<Display> sort = Sort.quickSort(displayList);
+            model.addAttribute("displayList",sort);
         }else {
             //进入else说明是大管理员（辅导员等）
             List<Display> displays = service.displayList();

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="bootstrap.css" th:href="@{/bootstrap.css}">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script>
+        $(function(){
+            var student = null;
+            $("#studentId").change(function(){
+                $.get('/check/checkStuId',{"studentId":$(this).val()},function(result){
+                    if (result.studentId==0){
+                        $("#studentName").prop("readonly",true);
+                        $("#id").text("该学号不是有效学号");
+                    }else {
+                        student = result;
+                        $("#studentName").prop("readonly",false);
+                        $("#id").text("");
+                    }
+                },'json');
+            });
+            $("#studentName").change(function(){
+                var studentName = $(this).val();
+                if (studentName!==student.studentName){
+                    $("#name").text('该姓名与学号不匹配');
+                }else {
+                    $("#name").text('');
+                }
+            });
+            $("#checkPass").change(function(){
+                var checkPass = $(this).val();
+                var password = $("#password").val();
+                if (checkPass!==password){
+                    $("#twoPass").text('两次密码不一致');
+                }else {
+                    $("#twoPass").text('');
+                }
+            });
+            $("#submitBtn").click(function(){
+                var id = $("#id").text();
+                var name = $("#name").text();
+                var twoPass = $("#twoPass").text();
+                if (id!=='' || name!=='' || twoPass!==''){
+                    alert("请正确填写信息");
+                }else {
+                    $("#theForm").submit();
+                }
+            });
+        });
+
+    </script>
+</head>
+<body class="container">
+<h2><a th:href="@{/check}" class="btn btn-info col-sm-1">返回</a>修改考勤信息</h2>
+<form th:action="@{/check/insert}" method="post" class="form-horizontal" id="theForm">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="checkinNo" >
+    <div class="form-group">
+        <label class="col-sm-2 control-label">学号：</label>
+        <div class="col-sm-5">
+            <input type="text" id="studentId" name="studentId" required>
+        </div>
+        <span style="color: red" id="id"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">姓名：</label>
+        <div class="col-sm-5">
+            <input type="text" id="studentName" name="studentName" required readonly>
+        </div>
+        <span style="color: red" id="name"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">密码：</label>
+        <div class="col-sm-5">
+            <input type="password" id="password" name="password" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">确认密码：</label>
+        <div class="col-sm-5">
+            <input type="password" id="checkPass" required>
+        </div>
+        <span style="color: red" id="twoPass"></span>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input id="submitBtn" value="提交" class="btn btn-info col-sm-2">
+            <input type="reset" value="重置" class="btn btn-info col-sm-2 col-sm-offset-2">
+        </div>
+    </div>
+</form>
+</body>
+</html>

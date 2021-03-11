@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface StudentMapper extends BaseMapper<Student> {
 
-    @Select("select student_id,student_name,grade,college,clazz from student where grade=#{grade} and college=#{college} and clazz=#{clazz}")
+    @Select("select * from student where grade=#{grade} and college=#{college} and clazz=#{clazz}")
     List<Student> studentIds(Student student);
 }

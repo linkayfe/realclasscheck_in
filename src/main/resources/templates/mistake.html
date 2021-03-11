@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>错误</title>
 </head>
 <body class="container">
-    <span>
+    <span th:text="${mistake}">
     经检查，输入信息有问题，请检查，<br>
     好好操作,否则将撤去管理员身份
     </span>

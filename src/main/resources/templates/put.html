@@ -7,8 +7,9 @@
 <body class="container">
 <h2><a th:href="@{/check/check}" class="btn btn-info col-sm-1">返回</a>修改考勤信息</h2>
 <input type="hidden" id="login" th:value="${session.login.studentId}">
-<form th:action="@{check/check}" method="post" class="form-horizontal" th:object="${display}">
+<form th:action="@{/check/check}" method="post" class="form-horizontal" th:object="${display}">
     <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="checkinNo" th:value="*{checkinNo}">
     <div class="form-group">
         <label class="col-sm-2 control-label">学号：</label>
         <div class="col-sm-5">
@@ -30,13 +31,13 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">学院：</label>
         <div class="col-sm-5">
-            <input type="datetime-local" id="college" th:value="*{college}" class="form-control" readonly>
+            <input type="text" id="college" th:value="*{college}" class="form-control" readonly>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">班级：</label>
         <div class="col-sm-5">
-            <input type="datetime-local" id="clazz" th:value="*{clazz}" class="form-control" readonly>
+            <input type="text" id="clazz" th:value="*{clazz}" class="form-control" readonly>
         </div>
     </div>
     <div class="form-group">

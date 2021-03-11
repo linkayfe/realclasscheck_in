@@ -35,22 +35,29 @@
             var subjectVal = $("#subject").val();
             var typeVal = $("#type").val();
             if (gradeVal!=null && gradeVal!='')
-            $("#"+gradeVal).selected = true;
+            $("#"+gradeVal).prop("selected",true);
             if (collegeVal!=null && collegeVal!='')
-            $("#"+collegeVal).selected = true;
+            $("#"+collegeVal).prop("selected",true);
             if (clazzVal!=null && clazzVal!='')
-            $("#"+clazzVal).selected = true;
+            $("#"+clazzVal).prop("selected",true);
             if (addressVal!=null && addressVal!='')
-            $("#"+addressVal).selected = true;
+            $("#"+addressVal).prop("selected",true);
             if (subjectVal!=null && subjectVal!='')
-            $("#"+subjectVal).selected = true;
+            $("#"+subjectVal).prop("selected",true);
             if (typeVal!=null && typeVal!='')
-            $("#"+typeVal).selected = true;
+            $("#"+typeVal).prop("selected",true);
+
+            $("#logout").click(function(){
+                var flag = confirm("确认退出登录？")
+                if (flag)
+                    location.href='/check/logout';
+            });
         });
     </script>
 </head>
 <body class="container">
-<span>您好，<a th:href="@{/check/logout}" th:text="${session.login.studentId}"></a></span>
+<span>您好，<a id="logout" th:text="${session.login.studentId}"></a></span>
+
 <h2>班级考勤列表</h2>
 <div class="hidden" th:object="${oldDisplay}">
     <input type="hidden" id="grade" th:value="*{grade}">
@@ -139,7 +146,12 @@
         <li th:if="${session.login.manager eq 1}">
             <a th:href="@{/check/check/toInsert}" class="btn btn-info">新增列表</a>
         </li>
+        <li>
+            <a th:href='@{/check/student/studentList/}+${session.login.studentId}' class="btn btn-info">学生列表</a>
+        </li>
+
     </ul>
+
 </form>
 <table class="table table-hover">
     <thead>
@@ -167,9 +179,9 @@
             <td th:text="*{display.subject}"></td>
             <td th:text="*{display.type}"></td>
             <td class="manager" th:if="${session.login.manager eq 1}">
-                <button th:href='@{/check/check/toUpdate/}+${display.checkinNo}' class='button btn-info'>修改</button><span>
+                <a th:href='@{/check/check/toUpdate/}+${display.checkinNo}' class='btn btn-info'>修改</a><span>
                 &nbsp;|&nbsp;</span>
-                <button th:attr='del_url=@{/check/check/}+${display.checkinNo}' name='del' class='button btn-danger'>删除</button>
+                <button th:attr='del_url=@{/check/check/}+${display.checkinNo}' name='del' class='btn btn-danger'>删除</button>
             </td>
         </tr>
     </tbody>
